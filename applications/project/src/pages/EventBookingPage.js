@@ -14,6 +14,7 @@ function EventBookingPage() {
     var web3 = undefined;
     var contract = undefined;
     var defaultTipPercent = 5;
+    var defaultGasLimit = 3000000;
 
     // stores state variables
     const [eventName, setEventName] = useState();
@@ -22,9 +23,11 @@ function EventBookingPage() {
     const [selectedSeat, setSelectedSeat] = useState(null);
     const [selectedSeatPrice, setSelectedSeatPrice] = useState(null);
     const [tipPercentValue, setTipPercentValue] = useState(defaultTipPercent);
+    const [gasLimit, setGasLimit] = useState(defaultGasLimit);
 
     // define ref elements
     const tipInputRef = useRef(null);
+    const gasLimitInputRef = useRef(null);
 
     // define navigate function
     const navigate = useNavigate();
@@ -69,12 +72,44 @@ function EventBookingPage() {
         setTipPercentValue(evt.target.value);
     };
 
+    const handleGasLimit = (evt) => {
+        setGasLimit(evt.target.value);
+    }
+
     async function handlePayment() {
+        let navigateToPaymentPage = true;
+        // re-establish wallet connection if lost
+        if (window.ethereum) {
+            web3 = new Web3(window.ethereum);
+            contract = new web3.eth.Contract(contractABI, contractAddress);
+        }
         // edge case handling: pop out error if seat not selected
         if (!selectedSeat || !selectedSeatPrice) {
             alert("Seat not selected!");
             return;
         }
+        // check if the address is connected or not
+        let currentAddress = sessionStorage.getItem('walletAddress');
+        if (!currentAddress) {
+            alert("No address connected to the website!");
+            return;
+        }
+        // check if the address already has a ticket
+        await contract.methods.tickets(currentAddress).call()
+        .then((res) => {
+            var ticketId = res.ticketId;
+            console.log(ticketId);
+            if (ticketId > 0) {
+                alert(`This address already has a ticket purchased! Ticket ID: ${ticketId}`);
+                navigateToPaymentPage = false;
+                return;
+            }
+        })
+        .catch((error) => {
+            alert(`An error occurred when checking the address! ${error}`);
+            navigateToPaymentPage = false;
+            return;
+        });
         // check the validity of the variables
         setTipPercentValue(tipInputRef.current.value);
         // console.log(selectedSeat);
@@ -98,16 +133,24 @@ function EventBookingPage() {
         else if (tipPercentValue > 20) {
             alert('Your tip is too large! Do you really want to burn that much ether?')
         }
-        else {
-            console.log(tipPercentValue);
+        // else {
+        //     console.log(tipPercentValue);
+        // }
+        // 3. check the validity of the gas limit
+        if (gasLimit < 0) {
+            alert('Invalid input! Gas limit must be positive!')
+        }
+        else if (gasLimit < 50000) {
+            alert('Gas limit is too low! Set the value to be more than 50000!')
         }
         // send the data to the payment page
-        let paymentPrice = priceInWei * (1 + tipPercentValue / 100);
-        let address = sessionStorage.getItem('walletAddress');
-        let data = {seat: selectedSeat, price: paymentPrice, address: address};
-        navigate('../../event/payment', {replace: true, state: {
-            seat: selectedSeat, price: paymentPrice, address: address
-        }});
+        if (navigateToPaymentPage) {
+            let address = sessionStorage.getItem('walletAddress');
+            navigate('../../event/payment', {replace: true, state: {
+                seat: selectedSeat, price: priceInWei, tip: tipPercentValue, 
+                gasLimit: gasLimit, address: address
+            }});
+        }
     }
     
     return (
@@ -127,10 +170,16 @@ function EventBookingPage() {
                     <h3 id="selectedSeat">Selected Seat: {selectedSeat}</h3>
                     <h3 id="ticketPrice">Ticket Price: {selectedSeatPrice}</h3>
                     <div className="tip-details">
-                        <h3 className="tip-payment">Select Tip Payment (%): </h3>
+                        <h3 className="tip-payment">Input Tip Payment (%): </h3>
                         <input ref={tipInputRef} id="tipRatioInput" className="tip-payment" 
-                        type="number"min="1" max="20" defaultValue={defaultTipPercent} 
+                        type="number" min="1" max="20" defaultValue={defaultTipPercent} 
                         onChange={handleTipPercent}></input>
+                    </div>
+                    <div className="gas-limit-details">
+                        <h3 className="gas-limit">Input Gas Limit: </h3>
+                        <input ref={gasLimitInputRef} id="gasLimitInput" className="gas-limit"
+                        type="number" min="50000" step="10000" defaultValue={defaultGasLimit}
+                        onChange={handleGasLimit}></input>
                     </div>
                     <button className="payment-button" onClick={handlePayment}>
                         Proceed to Payment

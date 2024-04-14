@@ -128,7 +128,13 @@ form button {
     align-items: center;
 }
 
-#selectedSeat, #ticketPrice, .tip-payment, .payment-button{
+.gas-limit-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#selectedSeat, #ticketPrice, .tip-payment, .payment-button, .gas-limit {
     margin: 0 1%;
 }
 
@@ -142,7 +148,16 @@ input.tip-payment {
     font-size: 1.2rem;
 }
 
-.payment-details {
+input.gas-limit {
+    margin-left: 0;
+    height: 1.5rem;
+    font-size: 1.2rem;
+    width: 25%;
+}
+
+.payment-details, 
+.payment-in-progress, 
+.payment-success {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -160,4 +175,8 @@ input.tip-payment {
 
 #err {
     color: red;
+}
+
+button:hover {
+    cursor: pointer;
 }
