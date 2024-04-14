@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  node-dev:
+    build: .
+    image: dapp-test
+    container_name: project-server
+    restart: always
+    ports: 
+      - 3000:3000
+    volumes:
+      - ./applications/project:/project
+    working_dir: /project
+    command: /bin/bash
+    
+    # the docker run -it option
+    stdin_open: true
+    tty: true
