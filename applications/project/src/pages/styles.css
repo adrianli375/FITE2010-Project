@@ -1,0 +1,182 @@
+.event-container {
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #530268;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header ul {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+}
+  
+.header li {
+    margin: 0 10px;
+}
+  
+.header a {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.nav {
+    display: flex;
+}
+
+.nav a {
+    color: #fff;
+    margin-right: 20px;
+}
+
+.section {
+    padding: 60px 0;
+}
+
+.section h1 {
+    margin-bottom: 40px;
+    text-align: center;
+    font-size: 2rem;
+}
+
+.events {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+form label {
+    margin-bottom: 10px;
+}
+
+form input,
+form button {
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.about-page {
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+  
+.about-title {
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+  
+.introduction-title,
+.motivation-title,
+.solution-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-top: 3rem;
+    margin-bottom: 1rem;
+}
+  
+.introduction-text,
+.motivation-text,
+.solution-text {
+    margin-bottom: 3rem;
+}
+
+.about-text {
+    padding: 0 5vw;
+}
+
+.price-details {
+    margin: 0 10%;
+    display: flex;
+    align-items: center;
+}
+
+.seat-price-details {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+}
+
+.tip-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gas-limit-details {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#selectedSeat, #ticketPrice, .tip-payment, .payment-button, .gas-limit {
+    margin: 0 1%;
+}
+
+.tip-details {
+    width: 20%;
+}
+
+input.tip-payment {
+    margin-left: 0;
+    height: 1.5rem;
+    font-size: 1.2rem;
+}
+
+input.gas-limit {
+    margin-left: 0;
+    height: 1.5rem;
+    font-size: 1.2rem;
+    width: 25%;
+}
+
+.payment-details, 
+.payment-in-progress, 
+.payment-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.payment-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.error-message {
+    padding-left: 15%;
+}
+
+#err {
+    color: red;
+}
+
+button:hover {
+    cursor: pointer;
+}
