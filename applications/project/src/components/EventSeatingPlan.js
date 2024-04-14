@@ -13,6 +13,8 @@ const EventSeatingPlan = (props) => {
     var contract = undefined;
 
     // state variables
+    const [isLoading, setIsLoading] = useState(true);
+    const [loadingProgress, setLoadingProgress] = useState(0);
     const [seatRows, setSeatRows] = useState(0);
     const [seatCols, setSeatCols] = useState(0);
     const [seatAvailability, setSeatAvailability] = useState({});
@@ -27,7 +29,7 @@ const EventSeatingPlan = (props) => {
         }
         getSeatingPlanAndPrices();
         renderSeats();
-        props.parentCallback(selectedSeat, selectedSeatPrice);
+        props.parentCallback(selectedSeat, selectedSeatPrice, isLoading);
     }, [seatAvailability, seatPrices, selectedSeat, selectedSeatPrice]);
 
 
@@ -51,6 +53,8 @@ const EventSeatingPlan = (props) => {
         getSeatCols().then().catch();
         let seatAvailability = {};
         let seatPrices = {};
+        let counter = 0;
+        let total = seatRows * seatCols;
         if (window.ethereum) {
             for (let i = 1; i <= seatRows; i++) {
                 for (let j = 1; j <= seatCols; j++) {
@@ -66,6 +70,10 @@ const EventSeatingPlan = (props) => {
                                 seatPrices[seat] = res;
                             }
                         );
+                        counter++;
+                        if (total > 0) {
+                            setLoadingProgress(counter / total);
+                        }
                     }
                     catch (error) {
                         console.log(error);
@@ -76,6 +84,8 @@ const EventSeatingPlan = (props) => {
             setSeatAvailability(seatAvailability);
             // console.log(JSON.stringify(seatPrices));
             setSeatPrices(seatPrices);
+            let loading = !(counter > 0);
+            setIsLoading(loading);
         }
     }
 
@@ -102,7 +112,7 @@ const EventSeatingPlan = (props) => {
             // obtain the price of the seat
             let prc = seatPrices[seat] / ether;
             setSelectedSeatPrice(`${prc} ether`);
-            props.parentCallback(selectedSeat, selectedSeatPrice);
+            props.parentCallback(selectedSeat, selectedSeatPrice, isLoading);
         }
     };
 
@@ -142,10 +152,17 @@ const EventSeatingPlan = (props) => {
             {/* <div className="seating-plan-refresh">
                 <button onClick={renderSeats}>Refresh Seating Plan</button>
             </div> */}
-            <h2>Seating Plan</h2>
-            <div className="seating-plan">
-                {renderSeats()}
-            </div>
+            {isLoading ? 
+                <div className="seating-plan">
+                    <h2>Loading seating plan...</h2>
+                    <progress value={loadingProgress}></progress>
+                </div>
+                :
+                <div className="seating-plan">
+                    <h2>Seating Plan</h2>
+                    {renderSeats()}
+                </div>
+            }
         </div>
     );
 };
