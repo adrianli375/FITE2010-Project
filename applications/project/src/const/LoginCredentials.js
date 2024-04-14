@@ -1,0 +1,2 @@
+export const authorizedUsernameHash = '0xf23ec0bb4210edd5cba85afd05127efcd2fc6a781bfed49188da1081670b22d8';
+export const authorizedPasswordHash = '0xac9e9c63312740da1ff861613a94df032fcbbc5f83027710a65ad03021b99ec6';
