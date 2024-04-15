@@ -50,7 +50,8 @@
     font-size: 2rem;
 }
 
-.events {
+.events,
+#reloadButton {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
