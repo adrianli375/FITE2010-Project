@@ -4,6 +4,10 @@ import Web3 from 'web3';
 import './styles_components.css';
 
 
+// define constant variable - sepolia chain ID
+const SepoliaChainId = 11155111;
+
+
 function WalletConnection() {
     // set the default message
     let defaultMessage = 'No wallet address connected';
@@ -21,6 +25,13 @@ function WalletConnection() {
         if (window.ethereum) {
           // instantiate Web3 with the injected provider
           const web3 = new Web3(window.ethereum);
+
+          // need to ensure that the wallet is connected to the Sepolia testnet chain
+          let connectedChainId = await web3.eth.getChainId();
+          if (connectedChainId !== SepoliaChainId) {
+            alert("Your wallet is not connected to the Sepolia Testnet!");
+            return;
+          }
     
           // request user to connect accounts (Metamask will prompt)
           await window.ethereum.request({ method: 'eth_requestAccounts' });

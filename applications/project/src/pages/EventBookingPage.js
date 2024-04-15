@@ -17,6 +17,7 @@ function EventBookingPage() {
     var defaultGasLimit = 3000000;
 
     // stores state variables
+    const [walletConnected, setWalletConnected] = useState(false);
     const [eventName, setEventName] = useState();
     const [eventDetails, setEventDetails] = useState();
     const [seatsRemaining, setSeatsRemaining] = useState();
@@ -33,14 +34,26 @@ function EventBookingPage() {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (window.ethereum) {
-            web3 = new Web3(window.ethereum);
-            contract = new web3.eth.Contract(contractABI, contractAddress);
+        // first checks if the wallet address is valid
+        let walletAddress = sessionStorage.getItem('walletAddress');
+        if (!walletAddress) {
+            alert("Wallet not connected to this site!");
         }
-        getEventName();
-        getEventDetails();
-        getSeatsAvailable();
-    }, []);
+        else {
+            setWalletConnected(true);
+        }
+
+        if (walletConnected) {
+            if (window.ethereum) {
+                web3 = new Web3(window.ethereum);
+                contract = new web3.eth.Contract(contractABI, contractAddress);
+            }
+            getEventName();
+            getEventDetails();
+            getSeatsAvailable();
+            updateWalletConnection();
+        }
+    }, [walletConnected]);
 
     async function getEventName() {
         if (window.ethereum) {
@@ -60,6 +73,16 @@ function EventBookingPage() {
         if (window.ethereum) {
             let seats = await contract.methods.getTotalAvailableTickets().call();
             setSeatsRemaining(seats);
+        }
+    }
+
+    async function updateWalletConnection() {
+        let walletAddress = sessionStorage.getItem('walletAddress');
+        if (walletAddress) {
+            setWalletConnected(true);
+        }
+        else {
+            setWalletConnected(false);
         }
     }
 
@@ -156,36 +179,48 @@ function EventBookingPage() {
     return (
         <div className="event-booking-container">
             <CustomHeader />
-            <br></br>
-            <br></br>
-            <WalletConnection />
-            <section id="eventBooking" className="section">
-                <h1 className="event-details">{eventName}</h1>
-                <h2 className="event-details">Details: {eventDetails}</h2>
-                <h2 className="subheading">Seats available: {seatsRemaining}</h2>
-                <EventSeatingPlan parentCallback={handleCallback} />
-            </section>
-            <section className="price-details">
-                <div className="seat-price-details">
-                    <h3 id="selectedSeat">Selected Seat: {selectedSeat}</h3>
-                    <h3 id="ticketPrice">Ticket Price: {selectedSeatPrice}</h3>
-                    <div className="tip-details">
-                        <h3 className="tip-payment">Input Tip Payment (%): </h3>
-                        <input ref={tipInputRef} id="tipRatioInput" className="tip-payment" 
-                        type="number" min="1" max="20" defaultValue={defaultTipPercent} 
-                        onChange={handleTipPercent}></input>
+            {!walletConnected ?
+                <div id="walletNotConnected">
+                    <br></br>
+                    <br></br>
+                    <WalletConnection />
+                    <br></br>
+                    <br></br>
+                    <div id="reloadButton">
+                        <button onClick={() => {window.location.reload()}}>Reload after Connection</button>
                     </div>
-                    <div className="gas-limit-details">
-                        <h3 className="gas-limit">Input Gas Limit: </h3>
-                        <input ref={gasLimitInputRef} id="gasLimitInput" className="gas-limit"
-                        type="number" min="50000" step="10000" defaultValue={defaultGasLimit}
-                        onChange={handleGasLimit}></input>
-                    </div>
-                    <button className="payment-button" onClick={handlePayment}>
-                        Proceed to Payment
-                    </button>
                 </div>
-            </section>
+            :
+                <div id="walletConnected">
+                    <section id="eventBooking" className="section">
+                        <h1 className="event-details">{eventName}</h1>
+                        <h2 className="event-details">Details: {eventDetails}</h2>
+                        <h2 className="subheading">Seats available: {seatsRemaining}</h2>
+                        <EventSeatingPlan parentCallback={handleCallback} />
+                    </section>
+                    <section className="price-details">
+                        <div className="seat-price-details">
+                            <h3 id="selectedSeat">Selected Seat: {selectedSeat}</h3>
+                            <h3 id="ticketPrice">Ticket Price: {selectedSeatPrice}</h3>
+                            <div className="tip-details">
+                                <h3 className="tip-payment">Input Tip Payment (%): </h3>
+                                <input ref={tipInputRef} id="tipRatioInput" className="tip-payment" 
+                                type="number" min="1" max="20" defaultValue={defaultTipPercent} 
+                                onChange={handleTipPercent}></input>
+                            </div>
+                            <div className="gas-limit-details">
+                                <h3 className="gas-limit">Input Gas Limit: </h3>
+                                <input ref={gasLimitInputRef} id="gasLimitInput" className="gas-limit"
+                                type="number" min="50000" step="10000" defaultValue={defaultGasLimit}
+                                onChange={handleGasLimit}></input>
+                            </div>
+                            <button className="payment-button" onClick={handlePayment}>
+                                Proceed to Payment
+                            </button>
+                        </div>
+                    </section>
+                </div>
+            }
         </div>
     );
 }

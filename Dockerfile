@@ -8,12 +8,10 @@ EXPOSE 3000
 WORKDIR /project
 
 # copy source code to the container
-COPY ./applications/project ./project
+COPY ./applications/project .
 
 # install necessary packages
-RUN npm install
+RUN npm install && npm install react-scripts
 
 # start the application/development server
 CMD ["npm", "start"]
-
-# RUN npm install -g create-react-app
