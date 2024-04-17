@@ -1,14 +1,12 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import './styles_components.css';
-
-
-// define constant variable - sepolia chain ID
-const SepoliaChainId = 11155111;
+import SepoliaChainId from '../const/SepoliaChainId.js';
 
 
 function WalletConnection() {
+
     // set the default message
     let defaultMessage = 'No wallet address connected';
 
@@ -17,8 +15,32 @@ function WalletConnection() {
         let connectedAccount = sessionStorage.getItem('walletAddress');
         defaultMessage = `Your connected wallet address: \n ${connectedAccount}`;
     }
-
+    
+    // state variables
     const [connectedAccount, setConnectedAccount] = useState(defaultMessage);
+
+    useEffect(() => {
+        if (window.ethereum) {
+            window.ethereum.on('accountsChanged', connectToAccount);
+        }
+    }, [connectedAccount]);
+
+    const connectToAccount = async () => {
+        const web3 = new Web3(window.ethereum);
+        // request user to connect accounts (Metamask will prompt)
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+    
+        // get the connected accounts
+        const accounts = await web3.eth.getAccounts();
+        let connectedAccount = accounts[0];
+  
+        // show the first connected account in the react page
+        setConnectedAccount(`Your connected wallet address: \n ${connectedAccount}`);
+
+        // set the address as session storage variable
+        sessionStorage.setItem('walletAddress', connectedAccount);
+        
+    };
 
     async function connectMetamask() {
         // check metamask is installed
@@ -33,18 +55,10 @@ function WalletConnection() {
             return;
           }
     
-          // request user to connect accounts (Metamask will prompt)
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-    
-          // get the connected accounts
-          const accounts = await web3.eth.getAccounts();
-          let connectedAccount = accounts[0];
-    
-          // show the first connected account in the react page
-          setConnectedAccount(`Your connected wallet address: \n ${connectedAccount}`);
+          await connectToAccount();
 
-          // set the address as session storage variable
-          sessionStorage.setItem('walletAddress', connectedAccount)
+          window.ethereum.on('accountsChanged', connectToAccount);
+
         } else {
           alert('Please download metamask');
         }
