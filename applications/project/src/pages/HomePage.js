@@ -18,6 +18,7 @@ const HomePage = () => {
     const [walletConnected, setWalletConnected] = useState(false);
     const [connectedAddress, setConnectedAddress] = useState();
     const [tickets, setTickets] = useState([]);
+    const [ticketIsEmpty, setTicketIsEmpty] = useState(true);
 
     useEffect(() => {
         if (window.ethereum) {
@@ -74,6 +75,9 @@ const HomePage = () => {
                     .then((ticket) => {
                         setTickets([ticket]);
                         // console.log(ticket);
+                        if (!!ticket.seat && !!ticket.price) {
+                            setTicketIsEmpty(false);
+                        }
                     })
                     .catch((error) => {
                         console.log(error);
@@ -113,7 +117,7 @@ const HomePage = () => {
             <br></br>
             <div className="homepage-container">
                 <h1> Welcome! </h1>
-                {walletConnected && !!tickets && !!sessionStorage.getItem('walletAddress') && 
+                {walletConnected && !!tickets && !ticketIsEmpty && !!sessionStorage.getItem('walletAddress') && 
                     <Tickets tickets={tickets} />
                 }
             </div>
