@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import Web3 from 'web3';
+import Clipboard from '../components/CopyClipboard.js';
 import CustomHeader from '../components/Header.js';
 import Tickets from '../components/Tickets.js';
 import { contractAddress, contractABI } from '../const/SmartContract.js';
@@ -22,6 +23,7 @@ function TransferPage() {
     const [recipientAddress, setRecipientAddress] = useState();
     const [transferBaseCost, setTransferBaseCost] = useState(0.0001); // in ether
     const [gasLimit, setGasLimit] = useState(3000000); // default gas limit in Remix IDE
+    const [txHash, settxHash] = useState();
     const [transferInitiated, setTransferInitiated] = useState(false);
     const [transferred, setTransferred] = useState(false);
     const [hasErr, setHasErr] = useState(false);
@@ -168,6 +170,10 @@ function TransferPage() {
         .on('sending', (payload) => {
             setTransferInitiated(true);
         })
+        .on('transactionHash', (hash) => {
+            settxHash(hash);
+            // console.log('Transaction hash:', hash);
+        })
         .on('confirmation', (confirmationNumber, receipt) => {
             let receiptStatus = receipt.status;
             let logs = receipt.logs;
@@ -233,7 +239,14 @@ function TransferPage() {
                         {!transferInitiated && transferred &&
                             <div className="transfer-success">
                                 <h2>Ticket transfer success!</h2>
-                                <h4>Ticket transferred to address: {recipientAddress}</h4>
+                                <h4>
+                                    Ticket transferred to address: {recipientAddress}
+                                    <Clipboard textToCopy={recipientAddress} />
+                                </h4>
+                                <a href={`https://sepolia.etherscan.io/tx/${txHash}`} className="view-on-etherscan"
+                                    target="_blank" rel="noopener noreferrer">
+                                    View transaction on Etherscan
+                                </a>
                                 <Link to="/">
                                     <button>Return to Home Page</button>
                                 </Link>
