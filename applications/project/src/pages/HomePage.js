@@ -75,9 +75,7 @@ const HomePage = () => {
                     .then((ticket) => {
                         setTickets([ticket]);
                         // console.log(ticket);
-                        if (!!ticket.seat && !!ticket.price) {
-                            setTicketIsEmpty(false);
-                        }
+                        (ticket.seat !== "" && ticket.price != 0) ? setTicketIsEmpty(false) : setTicketIsEmpty(true);
                     })
                     .catch((error) => {
                         console.log(error);
@@ -102,7 +100,7 @@ const HomePage = () => {
     async function handleAccountChange(accounts) {
         setTickets([]);
         let connectedAccount = accounts[0];
-        console.log(connectedAccount);
+        // console.log(connectedAccount);
         setConnectedAddress(connectedAccount);
         await updateConnectedAddress();
         await getTickets(connectedAccount);

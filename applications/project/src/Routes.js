@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage.js';
 import EventPage from './pages/EventPage.js';
 import EventBookingPage from './pages/EventBookingPage.js';
 import PaymentPage from './pages/PaymentPage.js';
+import TransferPage from './pages/TransferPage.js';
 import AboutPage from './pages/AboutPage.js';
 import AdminHomePage from './pages/AdminHomePage.js';
 import AdminLoginPage from './pages/AdminLoginPage.js';
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route exact path="/event" Component={EventPage} />
         <Route exact path="/event/booking" Component={EventBookingPage} />
         <Route exact path="/event/payment" Component={PaymentPage} />
+        <Route exact path="/transfer" Component={TransferPage} />
         <Route exact path="/about" Component={AboutPage} />
         <Route exact path="/admin" Component={AdminHomePage} />
         <Route exact path="/admin/login" Component={AdminLoginPage} />
