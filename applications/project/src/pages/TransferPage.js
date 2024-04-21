@@ -37,6 +37,14 @@ function TransferPage() {
             contract = new web3.eth.Contract(contractABI, contractAddress);
             window.ethereum.on('accountsChanged', detectAccountChanges);
         }
+
+        // cleanup
+        return () => {
+            if (window.ethereum) {
+                window.ethereum.off('accountsChanged', detectAccountChanges);
+            }
+        };
+
     }, [recipientAddress]);
 
     const detectAccountChanges = async () => {
@@ -199,7 +207,7 @@ function TransferPage() {
             <br></br>
             <h1 className="transfer-page-header">Transfer Your Ticket</h1>
             <div className="transfer-page-container">
-                {!!ticket && 
+                {!!ticket && Object.keys(ticket).length > 0 ?
                     <>
                         <Tickets tickets={ticket} />
                         {/* Initial component: when transfer is not yet initiated */}
@@ -237,6 +245,13 @@ function TransferPage() {
                                 <p id="err">Error: {err}</p>
                             </div>
                         }
+                    </>
+                    :
+                    <>
+                        <h2>No ticket found!</h2>
+                        <Link to="/">
+                            <button>Return to Home Page</button>
+                        </Link>
                     </>
                 }
             </div>
