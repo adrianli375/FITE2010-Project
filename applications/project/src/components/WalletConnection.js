@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import Web3 from 'web3';
 import './styles_components.css';
+import Clipboard from './CopyClipboard.js';
 import SepoliaChainId from '../const/SepoliaChainId.js';
 
 
@@ -17,13 +18,18 @@ function WalletConnection() {
     }
     
     // state variables
-    const [connectedAccount, setConnectedAccount] = useState(defaultMessage);
+    const [connectedAccount, setConnectedAccount] = useState();
+    const [connectedAccountMsg, setConnectedAccountMsg] = useState(defaultMessage);
 
     useEffect(() => {
         if (window.ethereum) {
             window.ethereum.on('accountsChanged', connectToAccount);
         }
-    }, [connectedAccount]);
+        let connectedAccount = sessionStorage.getItem('walletAddress');
+        if (connectedAccount) {
+            setConnectedAccount(connectedAccount);
+        }
+    }, [connectedAccount, connectedAccountMsg]);
 
     const connectToAccount = async () => {
         const web3 = new Web3(window.ethereum);
@@ -35,7 +41,8 @@ function WalletConnection() {
         let connectedAccount = accounts[0];
   
         // show the first connected account in the react page
-        setConnectedAccount(`Your connected wallet address: \n ${connectedAccount}`);
+        setConnectedAccount(connectedAccount);
+        setConnectedAccountMsg(`Your connected wallet address: \n ${connectedAccount}`);
 
         // set the address as session storage variable
         sessionStorage.setItem('walletAddress', connectedAccount);
@@ -74,7 +81,8 @@ function WalletConnection() {
 
         // reset the display text in the connection component
         defaultMessage = 'No wallet address connected';
-        setConnectedAccount(defaultMessage);
+        setConnectedAccountMsg(defaultMessage);
+        setConnectedAccount("");
 
         // remove the item in session storage
         sessionStorage.removeItem('walletAddress');
@@ -85,16 +93,20 @@ function WalletConnection() {
         <div className="wallet-connection">
             <h1>Connect to your Metamask Wallet address</h1>
             <div className="button-container">
-              {/* Button to trigger Metamask connection */}
-              <button onClick={() => connectMetamask()}>Connect to Metamask</button>
-              {/* Button to disconnect Metamask */}
-              <button onClick={() => disconnectMetamask()}>Disconnect from Metamask</button>
+                {/* Button to trigger Metamask connection */}
+                <button onClick={() => connectMetamask()}>Connect to Metamask</button>
+                {/* Button to disconnect Metamask */}
+                <button onClick={() => disconnectMetamask()}>Disconnect from Metamask</button>
             </div>
             <br></br>
             {/* Display the connected account */}
-            <h2>{connectedAccount}</h2>
+            <h2>{connectedAccountMsg}
+                {!!connectedAccount && 
+                    <Clipboard textToCopy={connectedAccount} />
+                }
+            </h2>
         </div>
-    );
+      );
 }
 
 export default WalletConnection;

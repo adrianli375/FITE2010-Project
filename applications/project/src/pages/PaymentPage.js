@@ -2,6 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import Web3 from 'web3';
+import Clipboard from '../components/CopyClipboard.js';
 import CustomHeader from '../components/Header.js';
 import { contractAddress, contractABI } from '../const/SmartContract.js';
 import TestNFT from '../const/NFTs.js';
@@ -221,7 +222,14 @@ function PaymentPage() {
                     <h2>Payment success!</h2>
                     <h3>Gas used: {gasUsed}</h3>
                     <h3>Please obtain your NFT token (ID: {nftTokenId}) from the following contract address: </h3>
-                    <h3>{contractAddressFromReceipt}</h3>
+                    <h3>
+                        {contractAddressFromReceipt}
+                        <Clipboard textToCopy={contractAddressFromReceipt} />
+                    </h3>
+                    <a href={`https://sepolia.etherscan.io/tx/${txHash}`} className="view-on-etherscan"
+                        target="_blank" rel="noopener noreferrer">
+                        View transaction on Etherscan
+                    </a>
                     <Link to="/">
                         <button>Return to Home Page</button>
                     </Link>

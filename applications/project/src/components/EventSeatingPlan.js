@@ -2,7 +2,7 @@ import React from 'react';
 import { useEffect, useState } from 'react';
 import Web3 from 'web3';
 import { contractAddress, contractABI } from '../const/SmartContract.js';
-import convertNumberToLetter from '../utils/UtilFunctions.js';
+import convertNumberToLetter from '../utils/StringUtilFunctions.js';
 import './styles_components.css';
 
 const ether = 10 ** 18;

@@ -80,6 +80,36 @@ form button {
     margin-top: 20px;
 }
 
+
+.copy-container {
+    position: relative;
+}
+
+.copy-button:hover {
+    cursor: pointer;
+}
+
+.copy-tooltip {
+    top: -30px;
+    width: 150%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    border-radius: 4px;
+    border-color: mediumorchid;
+    border-style: solid;
+    font-size: 1rem;
+    opacity: 0;
+    visibility: none;
+    white-space: nowrap;
+}
+
+.copy-button:hover + .copy-tooltip {
+    cursor: pointer;
+    opacity: 1;
+    visibility: visible;
+}
+
 .about-page {
     font-size: 1.1rem;
     line-height: 1.5;
@@ -273,4 +303,12 @@ button:hover {
 .transfer-error-message {
     display: flex;
     align-items: center;
+}
+
+a.view-on-etherscan:link, 
+a.view-on-etherscan:visited, 
+a.view-on-etherscan:hover, 
+a.view-on-etherscan:focus {
+    text-decoration: underline;
+    color: #111111;
 }
