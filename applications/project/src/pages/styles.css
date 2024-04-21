@@ -176,13 +176,14 @@ input.gas-limit {
 
 #err {
     color: red;
+    text-align: center;
 }
 
 button:hover {
     cursor: pointer;
 }
 
-.homepage-container {
+.homepage-container, .transfer-page-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -218,13 +219,58 @@ button:hover {
 .ticket-qr-code {
     position: relative;
     width: 128px;
+    display: flex;
+    flex-direction: column;
 }
 
 .ticket-qr-code-download-button {
     position: absolute;
     margin: 10px;
-    top: 50%;
+    top: 45%;
     left: 40%;
     transform: translate(-50%, -50%);
     cursor: pointer;
+}
+
+.transfer-page-header {
+    font-size: 2.5rem;
+    text-align: center;
+}
+
+.ticket-transfer {
+    position: absolute;
+    margin: 10px;
+    top: 65%;
+    left: 40%;
+    width: 120%;
+    transform: translate(-50%, -50%);
+}
+
+.transfer-section {
+    display: flex;
+    flex-direction: row;
+}
+
+.transfer-address-input {
+    width: 95%;
+    height: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.transfer-button {
+    width: 20rem;
+    height: 5rem;
+    font-size: 2rem;
+}
+
+.transfer-in-progress, 
+.transfer-success {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.transfer-error-message {
+    display: flex;
+    align-items: center;
 }
