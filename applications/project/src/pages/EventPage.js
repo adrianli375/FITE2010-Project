@@ -14,16 +14,18 @@ const EventPage = () => {
             <section id="events" className="section">
                 <h1>Explore Upcoming Events in Hong Kong</h1>
                 <div className="events">
-                    {/* original link: https://zh.wikipedia.org/zh-hk/%E7%82%8E%E6%98%8E%E7%86%B9 */}
                     <EventComponent eventLink="/event/booking"
-                    eventStar="Gigi Yim" eventTime="Apr 13 - 8:15PM" eventLocation="Star Hall, KITEC"
-                    eventImgPath="/imgs/gigi-yim.png"/>
+                    eventStar="Panther Chan" eventTime="Apr 13 - 8:15PM" eventLocation="Star Hall, KITEC"
+                    eventImgPath="/imgs/panther-chan.png"/>
                     <EventComponent eventLink="https://zh.wikipedia.org/zh-hk/%E6%B4%AA%E5%98%89%E8%B1%AA"
                     eventStar="Kaho Hung" eventTime="Apr 13 - 8:15PM" eventLocation="Hong Kong Coliseum"
                     eventImgPath="/imgs/kaho-hung.png" />
-                    <EventComponent eventLink="https://zh.wikipedia.org/zh-hk/%E9%84%AD%E7%A7%80%E6%96%87"
-                    eventStar="Sammi Cheng" eventTime="Jul 19 - 8:15PM" eventLocation="Hong Kong Coliseum"
-                    eventImgPath="/imgs/sammi-cheng.png" />
+                    <EventComponent eventLink="https://www.facebook.com/CreamfieldsHongKong/"
+                    eventStar="Creamfield HK" eventTime="Apr 14 - 5:00PM" eventLocation="Central Harbourfront Event Space"
+                    eventImgPath="/imgs/creamfield-hk.png" />
+                    <EventComponent eventLink="https://zh.wikipedia.org/zh-hk/%E4%B8%AD%E5%B9%B4%E5%A5%BD%E8%81%B2%E9%9F%B32"
+                    eventStar="Midlife, Sing & Shine 2" eventTime="Jul 19 - 8:15PM" eventLocation="Hong Kong Coliseum"
+                    eventImgPath="/imgs/midlife-sing-shine.png" />
                 </div>
             </section>
         </div>
