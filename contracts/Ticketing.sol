@@ -64,6 +64,8 @@ contract TicketingSystem is ERC721URIStorage {
     }
 
     // method to set the event details, can only be called by the event deployer
+    // @param _eventDetails store event Details
+    // @return bool true if event details successfully set
     function setEventDetails(string memory _eventDetails) 
         public onlyEventDeployer 
         returns (bool) {
@@ -74,6 +76,8 @@ contract TicketingSystem is ERC721URIStorage {
     }
 
     // method to set the seat details, can only be called by the event deployer
+    // @param _seatRows store the number of rows of seating
+    // @param _seatRows store the number of columns of seating
     // @return boolean true if thes seating plan is successfully emitted
     function setSeatingPlanDetails(
         uint8 _seatRows,
@@ -114,6 +118,7 @@ contract TicketingSystem is ERC721URIStorage {
     }
     
     // method to set the ticket price details, can only be called by the event deployer
+    // @param maxTransferCount limits the maximum number of transfer
     // @return boolean true if the setting was successful
     function setTicketPriceDetails(
         uint8 _maxTransferCount)
@@ -171,6 +176,8 @@ contract TicketingSystem is ERC721URIStorage {
     }
 
     // function to create a new ticket, and mint a new NFT
+    // @param _seat the seat Identifier
+    // @param _tokenURI the tokenURI for the minted toekn
     // @return the ticketID of the created ticket
     function createTicket(
         string memory _seat,
@@ -239,6 +246,7 @@ contract TicketingSystem is ERC721URIStorage {
     }
     
     // function to transfer the ticket to the recipient
+    // @param _recipient the wallet address of the recipient
     // @return bool true if successful
     function transferTicket(
         address _recipient
@@ -289,6 +297,7 @@ contract TicketingSystem is ERC721URIStorage {
     }
 
     // function to convert integer to string 
+    // @param value the integer value
     // @return the converted integer in string format
     function convertIntToStr(uint8 value) private pure returns (string memory) {
         require(value >= 1 && value <= 26, "Invalid input");
