@@ -13,10 +13,16 @@ const ether = 10 ** 18;
 function PaymentPage() {
     const location = useLocation();
 
-    if (!location.state.eventId || !location.state.seat || !location.state.price || 
-        !location.state.tip || !location.state.gasLimit || !location.state.address) {
+    try {
+        if (!location.state.eventId || !location.state.seat || !location.state.price || 
+            !location.state.tip || !location.state.gasLimit || !location.state.address) {
+            window.location.href = './../invalid-input';
+        }
+    }
+    catch (error) {
         window.location.href = './../invalid-input';
     }
+    
     
     // loads the data attributes to obtain the contract address
     const eventId = location.state.eventId;

@@ -13,7 +13,13 @@ function EventBookingPage() {
 
     // reads in the properties (event ID)
     let { state } = useLocation();
-    const eventId = state.eventId;
+    try {
+        var eventId = state.eventId;
+    }
+    catch (error) {
+        window.location.href = './../invalid-input';
+    }
+    
 
     if (!eventId) {
         window.location.href = './../invalid-input';
