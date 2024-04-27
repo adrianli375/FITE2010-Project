@@ -1,10 +1,10 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { useLocation, Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Web3 from 'web3';
 import Clipboard from '../components/CopyClipboard.js';
 import CustomHeader from '../components/Header.js';
-import { contractAddress, contractABI } from '../const/SmartContract.js';
+import { contractAddresses, testContractAddress, contractABI } from '../const/SmartContract.js';
 import TestNFT from '../const/NFTs.js';
 
 const gwei = 10 ** 9;
@@ -13,17 +13,34 @@ const ether = 10 ** 18;
 function PaymentPage() {
     const location = useLocation();
 
-    if (!location.state.seat || !location.state.price || 
-        !location.state.tip || !location.state.gasLimit || 
-        !location.state.address) {
+    if (!location.state.eventId || !location.state.seat || !location.state.price || 
+        !location.state.tip || !location.state.gasLimit || !location.state.address) {
         window.location.href = './../invalid-input';
     }
     
+    // loads the data attributes to obtain the contract address
+    const eventId = location.state.eventId;
+    var contractIdx = eventId - 1;
+    var contractAddress = contractAddresses[contractIdx];
+    if (!contractAddress) {
+        contractAddress = testContractAddress;
+    }
+    
+    // loads other data attributes to obtain other ticket payment details
     const seat = location.state.seat;
     const price = location.state.price / ether;
     const tip = location.state.tip;
     const gasLimit = location.state.gasLimit;
     const address = location.state.address;
+
+    // define navigate function to navigate back to booking
+    const navigate = useNavigate();
+    
+    const navigateToBooking = () => {
+        navigate('/event/booking', {replace: true, state: {
+            eventId: eventId
+        }});
+    };
 
     // defines the web3 object and smart contract object
     var web3 = undefined;
@@ -200,9 +217,7 @@ function PaymentPage() {
                     <p>Spending from address: {address}</p>
                     {!paid && !paymentInitiated && 
                         <div className="payment-buttons">
-                            <Link to="/event/booking">
-                                <button>Back</button>
-                            </Link>
+                            <button onClick={navigateToBooking}>Back</button>
                             <button onClick={getCurrentGasPrice}>Refresh Gas Cost</button>
                             <button onClick={handlePayment}>Pay Now</button>
                         </div>

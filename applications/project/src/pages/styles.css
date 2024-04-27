@@ -2,6 +2,10 @@
     font-family: Arial, sans-serif;
 }
 
+.event-link {
+    cursor: pointer;
+}
+
 .header {
     background-color: #530268;
     height: 60px;

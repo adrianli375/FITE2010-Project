@@ -1,9 +1,12 @@
 // this script defines the contract address and the ABI
 
 export const contractAddresses = [
-	"0x03f3572E8771BDe5FAF48D78c8c64b38c5A4ace5"
+	"0xBCD1Fd8782a0Fda2f75BD3B208C48618B0cd9aA2",
+	"0xa43Fbe29eC96092B1F47369E8D802d620612Ba9A",
+	"0xEc3fcd1558838a21Dc1f5B4Ed9c066Ff3cA41004",
+	"0x8F89BA79d554bF973F773e1D34d8f9fBDC66CFb6"
 ];
-export const contractAddress = "0xBd9E903d390c104322653fD8DbC224dB1ff8fff8";
+export const testContractAddress = "0xBd9E903d390c104322653fD8DbC224dB1ff8fff8";
 export const contractABI = [
 	{
 		"inputs": [
@@ -1027,4 +1030,4 @@ export const contractABI = [
 		"stateMutability": "payable",
 		"type": "function"
 	}
-]
+];

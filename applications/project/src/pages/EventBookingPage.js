@@ -1,15 +1,30 @@
 import React from 'react';
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Web3 from 'web3';
 import CustomHeader from '../components/Header.js';
 import EventSeatingPlan from '../components/EventSeatingPlan.js';
 import WalletConnection from '../components/WalletConnection.js';
-import { contractAddress, contractABI } from '../const/SmartContract.js';
+import { contractAddresses, testContractAddress, contractABI } from '../const/SmartContract.js';
 
 const ether = 10 ** 18;
 
 function EventBookingPage() {
+
+    // reads in the properties (event ID)
+    let { state } = useLocation();
+    const eventId = state.eventId;
+
+    if (!eventId) {
+        window.location.href = './../invalid-input';
+    }
+
+    var contractIdx = eventId - 1;
+    var contractAddress = contractAddresses[contractIdx];
+    if (!contractAddress) {
+        contractAddress = testContractAddress;
+    }
+
     // defines the web3 object and smart contract object
     var web3 = undefined;
     var contract = undefined;
@@ -170,8 +185,8 @@ function EventBookingPage() {
         if (navigateToPaymentPage) {
             let address = sessionStorage.getItem('walletAddress');
             navigate('../../event/payment', {replace: true, state: {
-                seat: selectedSeat, price: priceInWei, tip: tipPercentValue, 
-                gasLimit: gasLimit, address: address
+                eventId: eventId, seat: selectedSeat, price: priceInWei, 
+                tip: tipPercentValue, gasLimit: gasLimit, address: address
             }});
         }
     }
@@ -196,7 +211,7 @@ function EventBookingPage() {
                         <h1 className="event-details">{eventName}</h1>
                         <h2 className="event-details">Details: {eventDetails}</h2>
                         <h2 className="subheading">Seats available: {seatsRemaining}</h2>
-                        <EventSeatingPlan parentCallback={handleCallback} />
+                        <EventSeatingPlan eventId={eventId} parentCallback={handleCallback} />
                     </section>
                     <section className="price-details">
                         <div className="seat-price-details">
