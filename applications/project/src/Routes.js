@@ -10,6 +10,7 @@ import AboutPage from './pages/AboutPage.js';
 import AdminHomePage from './pages/AdminHomePage.js';
 import AdminLoginPage from './pages/AdminLoginPage.js';
 import AdminEventPage from './pages/AdminEventPage.js';
+import AdminEventApplicationPage from './pages/AdminEventApplicationPage.js';
 import LoginErrorPage from './pages/LoginErrorPage.js';
 import InvalidInputPage from './pages/InvalidInputPage.js';
 import NotFoundPage from './pages/NotFoundPage.js';
@@ -27,6 +28,7 @@ const AppRoutes = () => {
         <Route exact path="/admin" Component={AdminHomePage} />
         <Route exact path="/admin/login" Component={AdminLoginPage} />
         <Route exact path="/admin/events" Component={AdminEventPage} />
+        <Route exact path="/admin/apply-event" Component={AdminEventApplicationPage} />
         <Route exact path="/login-error" Component={LoginErrorPage} />
         <Route exact path="/invalid-input" Component={InvalidInputPage} />
         <Route path="*" Component={NotFoundPage} />
