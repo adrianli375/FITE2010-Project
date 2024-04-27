@@ -1,14 +1,22 @@
 import React from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './styles_admin.css';
 
 import { authorizedUsernameHash, authorizedPasswordHash } from '../const/LoginCredentials.js';
 
-const username = sessionStorage.getItem('username');
-const password = sessionStorage.getItem('password');
-const loggedIn = username === authorizedUsernameHash && password === authorizedPasswordHash;
 
 const AdminHomePage = () => {
+
+    const [loggedIn, setLoggedin] = useState(false);
+
+    useEffect(() => {
+      const username = sessionStorage.getItem('username');
+      const password = sessionStorage.getItem('password');
+      let loggedIn = username === authorizedUsernameHash && password === authorizedPasswordHash;
+      setLoggedin(loggedIn);
+    }, [loggedIn]);
+
     return (
         <div className="container">
           <h1 className="heading">Register your Events to attract audience on our Blockchain-based ticketing system!</h1>
