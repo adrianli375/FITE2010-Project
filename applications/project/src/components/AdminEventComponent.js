@@ -1,7 +1,12 @@
 import React from 'react';
+import { contractAddresses } from '../const/SmartContract.js';
 
 
-const AdminEventComponent = ({eventStar, eventTime, eventLocation, eventImgPath}) => {
+const AdminEventComponent = ({eventId, eventStar, eventTime, eventLocation, eventImgPath}) => {
+    
+    let contractIdx = eventId - 1;
+    const eventContractAddress = contractAddresses[contractIdx];
+    
     return (
         <div className="event">
             <div className="event-text">
@@ -12,6 +17,12 @@ const AdminEventComponent = ({eventStar, eventTime, eventLocation, eventImgPath}
             <div className="event-image">
                 <img src={eventImgPath} alt={eventStar} />
             </div>
+            <br></br>
+            <a href={`https://sepolia.etherscan.io/address/${eventContractAddress}`} 
+                className="view-on-etherscan"
+                target="_blank" rel="noopener noreferrer">
+                View contract on Etherscan
+            </a>
         </div>
     );
 };

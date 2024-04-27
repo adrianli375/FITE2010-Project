@@ -5,7 +5,7 @@ import './styles.css';
 import CustomHeader from '../components/Header.js';
 import WalletConnection from '../components/WalletConnection.js';
 import Tickets from '../components/Tickets.js';
-import { contractAddress, contractABI } from '../const/SmartContract.js';
+import { testContractAddress, contractABI } from '../const/SmartContract.js';
 import SepoliaChainId from '../const/SepoliaChainId.js';
 
 
@@ -64,6 +64,9 @@ const HomePage = () => {
                     return;
                 }
 
+                // placeholder only, to be removed in multiple-tickets update
+                let contractAddress = testContractAddress;
+                
                 const contract = new web3.eth.Contract(contractABI, contractAddress);
                 let connectedAddress = account;
                 if (!connectedAddress) {

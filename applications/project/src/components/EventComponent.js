@@ -1,21 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
-const EventComponent = ({eventLink, eventStar, eventTime, eventLocation, eventImgPath}) => {
+const EventComponent = ({eventLink, eventId, eventStar, eventTime, eventLocation, eventImgPath}) => {
+    
+    // define navigate function
+    const navigate = useNavigate();
+    
+    const navigateToBooking = () => {
+        navigate(eventLink, {replace: true, state: {
+            eventId: eventId
+        }});
+    };
+    
     return (
-        <Link to={eventLink} className="event-link">
-            <div className="event">
-                <div className="event-text">
-                    <h3 className="event-title">{eventStar}</h3>
-                    <p className="event-details">{eventTime}</p>
-                    <p className="event-details">{eventLocation}</p>
-                </div>
-                <div className="event-image">
-                    <img src={eventImgPath} alt={eventStar} />
-                </div>
+        <div className="event event-link" onClick={navigateToBooking}>
+            <div className="event-text">
+                <h3 className="event-title">{eventStar}</h3>
+                <p className="event-details">{eventTime}</p>
+                <p className="event-details">{eventLocation}</p>
             </div>
-        </Link>
+            <div className="event-image">
+                <img src={eventImgPath} alt={eventStar} />
+            </div>
+        </div>
     );
 };
 

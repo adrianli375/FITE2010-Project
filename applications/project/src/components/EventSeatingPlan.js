@@ -1,13 +1,22 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import Web3 from 'web3';
-import { contractAddress, contractABI } from '../const/SmartContract.js';
+import { contractAddresses, testContractAddress, contractABI } from '../const/SmartContract.js';
 import convertNumberToLetter from '../utils/StringUtilFunctions.js';
 import './styles_components.css';
 
 const ether = 10 ** 18;
 
 const EventSeatingPlan = (props) => {
+
+    // reads in the properties (event ID)
+    const { eventId } = props;
+    var contractIdx = eventId - 1;
+    var contractAddress = contractAddresses[contractIdx];
+    if (!contractAddress) {
+        contractAddress = testContractAddress;
+    }
+
     // defines the web3 object and smart contract object
     var web3 = undefined;
     var contract = undefined;
@@ -105,7 +114,7 @@ const EventSeatingPlan = (props) => {
             if (existingSeat !== null) {
                 // remove the styling of the old seat
                 document.getElementById(existingSeat).classList.remove('selected');
-            }
+           }
             // set the selected seat and update the styling of the new seat
             setSelectedSeat(seat);
             document.getElementById(seat).classList.add('selected');

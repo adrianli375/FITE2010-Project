@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Web3 from 'web3';
 import Clipboard from '../components/CopyClipboard.js';
-import { contractABI } from '../const/SmartContract.js';
+import { contractAddresses, contractABI } from '../const/SmartContract.js';
 import SepoliaChainId from '../const/SepoliaChainId.js';
+import EventVenueMapping from '../const/EventVenueMapping.js';
 import sleep from '../utils/Sleep.js';
+import { authorizedUsernameHash, authorizedPasswordHash } from '../const/LoginCredentials.js';
 
 
 const AdminEventApplicationPage = () => {
@@ -25,11 +27,20 @@ const AdminEventApplicationPage = () => {
     const [isManualApplication, setIsManualApplication] = useState(false);
     const [isAutoApplication, setIsAutoApplication] = useState(false);
     const [applicationInProgress, setApplicationInProgress] = useState(false);
-    const [applicationMessage, setApplicationMessage] = useState();
+    const [applicationMessage, setApplicationMessage] = useState('Initializing your application...');
     const [applicationFinished, setApplicationFinished] = useState(false);
     const [deploymentTxHash, setDeploymentTxHash] = useState();
     const [deploymentGasUsed, setDeploymentGasUsed] = useState(0);
     const [deployedContractAddress, setDeployedContractAddress] = useState();
+    const [eventId, setEventId] = useState();
+
+    // check if the user is logged in or not, if not, redirect to the error page
+    const username = sessionStorage.getItem('username');
+    const password = sessionStorage.getItem('password');
+
+    if (username !== authorizedUsernameHash || password !== authorizedPasswordHash) {
+        return <Navigate to="/login-error" />;
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -60,7 +71,10 @@ const AdminEventApplicationPage = () => {
                 const [fullTime, hour, minute] = regex2.exec(eventTime);
                 let convertedTime = `${hour > 12 ? hour - 12 : hour}:${minute}${hour >= 12 ? "PM" : "AM"}`;
 
-                let eventDetails = `${month} ${eventDay} - ${convertedTime}`;
+                // update the event venue into full name
+                let eventVenueFullName = EventVenueMapping[eventVenue];
+
+                let eventDetails = `${month} ${eventDay} - ${convertedTime} @ ${eventVenueFullName}`;
                 console.log(eventDetails);
 
                 // need to ensure that the wallet is connected to the Sepolia testnet chain
@@ -83,6 +97,8 @@ const AdminEventApplicationPage = () => {
                         let bytecode = `0x${result}`;
                         console.log('Bytecode obtained');
 
+                        let confirmationTriggers = 0;
+
                         // deploy the contract
                         if (!!connectedAddress && !!bytecode) {
                             undeployedContract.deploy({
@@ -101,6 +117,8 @@ const AdminEventApplicationPage = () => {
                                 setApplicationMessage('Deployment in progress...')
                             })
                             .on('confirmation', async (confirmationNumber, receipt) => {
+                                // increment the counter
+                                confirmationTriggers++;
                                 // indicate payment successful message
                                 // indicate gas used
                                 let gasUsed = receipt.gasUsed;
@@ -110,12 +128,18 @@ const AdminEventApplicationPage = () => {
                                 setDeployedContractAddress(contractAddressFromReceipt);
                                 setApplicationMessage('Contract deployed! Setting up event details...')
                                 // after deploying the contract, set up other event and ticket details
-                                contractSetup(contractAddressFromReceipt, eventDetails, connectedAddress);
-                                console.log('Setup finished!');
-                                await sleep(2);
-                                setApplicationMessage('Finished!');
-                                setApplicationInProgress(false);
-                                setApplicationFinished(true);
+                                if (confirmationTriggers <= 1) {
+                                    await contractSetup(contractAddressFromReceipt, eventDetails, connectedAddress);
+                                    console.log('Setup finished!');
+
+                                    // update state variables
+                                    await sleep(2);
+                                    setApplicationMessage('Finished!');
+                                    await sleep(0.5);
+                                    setEventId(contractAddresses.length + 1);
+                                    setApplicationInProgress(false);
+                                    setApplicationFinished(true);
+                                }
                             });
                         }
                     });
@@ -129,6 +153,7 @@ const AdminEventApplicationPage = () => {
         var web3 = new Web3(window.ethereum);
         const deployedContract = new web3.eth.Contract(contractABI, contractAddress);
         if (!!deployedContract) {
+            setApplicationMessage('Setting up event details...')
             // set up event details
             await deployedContract.methods.setEventDetails(eventDetails)
             .send({from: connectedAddress})
@@ -136,7 +161,12 @@ const AdminEventApplicationPage = () => {
                 alert(error.message);
                 setApplicationInProgress(false);
             })
-            .on('confirmation', (confirmation, receipt) => console.log('Event details set!'));
+            .on('confirmation', (confirmation, receipt) => {
+                setApplicationMessage('Event details set!');
+            });
+            
+            await sleep(2);
+            setApplicationMessage('Setting up seating plan details...')
 
             // set up seating plan
             await deployedContract.methods.setSeatingPlanDetails(eventRows, eventCols)
@@ -145,7 +175,12 @@ const AdminEventApplicationPage = () => {
                 alert(error.message);
                 setApplicationInProgress(false);
             })
-            .on('confirmation', (confirmation, receipt) => console.log('Seating plan details set!'));
+            .on('confirmation', (confirmation, receipt) => {
+                setApplicationMessage('Seating plan details set!');
+            });
+
+            await sleep(2);
+            setApplicationMessage('Setting up ticket details...')
 
             // set up ticket resale details
             await deployedContract.methods.setTicketPriceDetails(eventTicketTransferLimit)
@@ -154,7 +189,9 @@ const AdminEventApplicationPage = () => {
                 alert(error.message);
                 setApplicationInProgress(false);
             })
-            .on('confirmation', (confirmation, receipt) => console.log('Ticket details set!'));
+            .on('confirmation', (confirmation, receipt) => {
+                setApplicationMessage('Ticket details set!');
+            });
         }
     };
 
@@ -247,6 +284,7 @@ const AdminEventApplicationPage = () => {
             {applicationFinished && isAutoApplication && 
                 <div className="application-success-auto">
                     <h3>Your application is successful. </h3>
+                    <h3>Event ID: {eventId}</h3>
                     <h4>Gas used for deployment: {deploymentGasUsed}</h4>
                     <h4>Please ensure that you have copied the contract address below. </h4>
                     <h4>Contract address: {deployedContractAddress ? deployedContractAddress : "unavailable"} 
