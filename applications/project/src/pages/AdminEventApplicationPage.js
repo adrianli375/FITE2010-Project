@@ -76,8 +76,7 @@ const AdminEventApplicationPage = () => {
                 console.log(`Address connected: ${connectedAddress}`);
 
                 // obtain the bytecode
-                //TODO: change back to master branch instead of current working branch
-                await fetch('https://raw.githubusercontent.com/adrianli375/FITE2010-Project/admin-page-application/applications/project/src/const/SmartContractByteCode.bin')
+                await fetch('https://raw.githubusercontent.com/adrianli375/FITE2010-Project/master/applications/project/src/const/SmartContractByteCode.bin')
                 .then((response) => {
                     response.text()
                     .then((result) => {
