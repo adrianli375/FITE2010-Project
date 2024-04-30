@@ -10,9 +10,6 @@ import zeroAddress from '../const/ZeroAddress.js';
 
 
 function TransferPage() {
-
-    // placeholder: to be updated soon
-    var contractAddress = testContractAddress;
     
     // defines the web3 object and smart contract object
     var web3 = undefined;
@@ -20,6 +17,7 @@ function TransferPage() {
 
     let { state } = useLocation();
     let ticketData = !!state ? [JSON.parse(state.ticket)] : {};
+    const contractAddress = !!state ? state.contractAddress : undefined;
 
     // set state variables
     const [ticket, setTicket] = useState(ticketData);
