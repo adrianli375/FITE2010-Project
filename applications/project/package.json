@@ -19,7 +19,7 @@
     "mocha": "^10.4.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "mocha",
     "eject": "react-scripts eject"
