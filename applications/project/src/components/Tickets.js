@@ -1,5 +1,5 @@
 import React from "react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from 'react-router-dom';
 import {QRCodeCanvas} from 'qrcode.react';
 import Web3 from "web3";
@@ -44,18 +44,32 @@ const Tickets = ({ tickets }) => {
     const prevTicketsRef = useRef(tickets);
 
     useEffect(() => {
-        if (prevTicketsRef.current !== tickets) {
+        if (JSON.stringify(prevTicketsRef.current) !== JSON.stringify(tickets)) {
             // there is an update in tickets
             prevTicketsRef.current = tickets;
         }
     }, [tickets]);
+
+    // define state variable to keep track of the current ticket index
+    const [currentTicketIdx, setCurrentTicketIdx] = useState(0);
     
     let location = useLocation();
     let currentPath = location.pathname;
     const transferPath = "/transfer";
 
+    const handleNextTicket = () => {
+        let nextIdx = currentTicketIdx + 1;
+        setCurrentTicketIdx(nextIdx);
+    };
+
+    const handlePreviousTicket = () => {
+        let prevIdx = currentTicketIdx - 1;
+        setCurrentTicketIdx(prevIdx);
+    };
+
     if (tickets.length > 0) {
-        let ticket = tickets[0];
+        let ticket = tickets[currentTicketIdx];
+        const ticketMaxIdx = tickets.length - 1;
         let ticketName = `${ticket.eventName}_Seat_${ticket.seat}`;
         let remainingTransfers = ticket.maxTransferCount - ticket.transferCount;
         let currentAddress = sessionStorage.getItem('walletAddress');
@@ -64,30 +78,40 @@ const Tickets = ({ tickets }) => {
         let qrCodeHashedString = Web3.utils.keccak256(`${JSON.stringify(ticket)}${currentAddress}`);
 
         return (
-            <div className="ticket">
-                <div className="ticket-left">
-                    <h2 className="ticket-title">Ticket</h2>
-                    <p className="ticket-info">Event Name: {ticket.eventName}</p>
-                    <p className="ticket-info">Event Details: {ticket.eventDetails}</p>
-                    <p className="ticket-info">Seat: {ticket.seat}</p>
-                    <p className="ticket-info">Price: {ticket.price / ether} ether</p>
-                    <p className="ticket-info">Transfer count: {ticket.transferCount}</p>
-                    {remainingTransfers > 0 ?
-                        <p className="ticket-info">You can transfer this ticket for {remainingTransfers} more time{remainingTransfers > 1 ? "s" : ""}. </p>
-                        :
-                        <p className="ticket-info">You cannot transfer this ticket anymore. </p>
-                    }
+            <div className="ticket-container">
+                <div className="ticket-navigation-button">
+                    <span id="prev" role="img" onClick={handlePreviousTicket}
+                        style={currentTicketIdx > 0 ? {cursor: 'pointer'} : { visibility: 'hidden' }}>◀️</span>
                 </div>
-                <div className="ticket-qr-code">
-                    <QRCodeCanvas className="ticket-qr-code-canvas" value={qrCodeHashedString} 
-                            size={128} level="M" />
-                    <button className="ticket-qr-code-download-button" 
-                            onClick={() => downloadQRCode(ticketName)}>Download QR Code</button>
-                    {ticket.transferCount < ticket.maxTransferCount && !!ticket && currentPath !== transferPath && 
-                        <Link to="/transfer" state={{ ticket: JSON.stringify(ticket) }}>
-                            <button className="ticket-transfer">Transfer your ticket?</button>
-                        </Link>
-                    }
+                <div className="ticket">
+                    <div className="ticket-left">
+                        <h2 className="ticket-title">Ticket</h2>
+                        <p className="ticket-info">Event Name: {ticket.eventName}</p>
+                        <p className="ticket-info">Event Details: {ticket.eventDetails}</p>
+                        <p className="ticket-info">Seat: {ticket.seat}</p>
+                        <p className="ticket-info">Price: {ticket.price / ether} ether</p>
+                        <p className="ticket-info">Transfer count: {ticket.transferCount}</p>
+                        {remainingTransfers > 0 ?
+                            <p className="ticket-info">You can transfer this ticket for {remainingTransfers} more time{remainingTransfers > 1 ? "s" : ""}. </p>
+                            :
+                            <p className="ticket-info">You cannot transfer this ticket anymore. </p>
+                        }
+                    </div>
+                    <div className="ticket-qr-code">
+                        <QRCodeCanvas className="ticket-qr-code-canvas" value={qrCodeHashedString} 
+                                size={128} level="M" />
+                        <button className="ticket-qr-code-download-button" 
+                                onClick={() => downloadQRCode(ticketName)}>Download QR Code</button>
+                        {ticket.transferCount < ticket.maxTransferCount && !!ticket && currentPath !== transferPath && 
+                            <Link to="/transfer" state={{ ticket: JSON.stringify(ticket) }}>
+                                <button className="ticket-transfer">Transfer your ticket?</button>
+                            </Link>
+                        }
+                    </div>
+                </div>
+                <div className="ticket-navigation-button">
+                    <span id="next" role="img" onClick={handleNextTicket}
+                        style={currentTicketIdx < ticketMaxIdx ? {cursor: 'pointer'} : { visibility: 'hidden' }}>▶️</span>
                 </div>
             </div>
         );
