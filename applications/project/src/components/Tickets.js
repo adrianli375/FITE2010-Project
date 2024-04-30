@@ -83,7 +83,7 @@ const Tickets = ({ tickets }) => {
                             size={128} level="M" />
                     <button className="ticket-qr-code-download-button" 
                             onClick={() => downloadQRCode(ticketName)}>Download QR Code</button>
-                    {ticket.transferCount < ticket.maxTransferCount && !!ticket && currentPath != transferPath && 
+                    {ticket.transferCount < ticket.maxTransferCount && !!ticket && currentPath !== transferPath && 
                         <Link to="/transfer" state={{ ticket: JSON.stringify(ticket) }}>
                             <button className="ticket-transfer">Transfer your ticket?</button>
                         </Link>
