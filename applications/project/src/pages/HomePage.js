@@ -78,7 +78,7 @@ const HomePage = () => {
                     .then((ticket) => {
                         setTickets([ticket]);
                         // console.log(ticket);
-                        (ticket.seat !== "" && ticket.price != 0) ? setTicketIsEmpty(false) : setTicketIsEmpty(true);
+                        (ticket.seat !== "" && ticket.price !== 0) ? setTicketIsEmpty(false) : setTicketIsEmpty(true);
                     })
                     .catch((error) => {
                         console.log(error);
