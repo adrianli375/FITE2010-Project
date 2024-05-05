@@ -1,0 +1,23 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Concert Name",
+      "value": "洪嘉豪 Kaho Live 2024"
+    },
+    {
+      "trait_type": "Artist Name",
+      "value": "洪嘉豪"
+    },
+    {
+      "trait_type": "Venue",
+      "value": "紅館（香港體育館）"
+    },
+    {
+      "trait_type": "Organizer",
+      "value": "Warner Music Hong Kong"
+    }
+  ],
+  "description": "由保誠保險呈獻， Hung KAHO 洪嘉豪首個個人紅館演唱會《洪嘉豪 Kaho Live 2024》",
+  "image": "ipfs://QmQ4TNSqeqVZ4EponEr2YiBJSyMnHGXQf1NZJ8qUd2QAzc/KahoHung%201.jpeg",
+  "name": "Kaho Live 2024 Concert Ticket"
+}
