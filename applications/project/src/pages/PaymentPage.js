@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import Clipboard from '../components/CopyClipboard.js';
 import CustomHeader from '../components/Header.js';
 import { contractAddresses, testContractAddress, contractABI } from '../const/SmartContract.js';
-import TestNFT from '../const/NFTs.js';
+import NFTs from '../const/NFTs.js';
 
 const gwei = 10 ** 9;
 const ether = 10 ** 18;
@@ -138,13 +138,23 @@ function PaymentPage() {
         });
 
         if (addressIsValid) {
+            // given the eventId, get the list of all NFTs for that specific event
+            const nftList = NFTs[eventId - 1]["nftList"];
+
+            // pick a random NFT from the list of NFTs obtained
+            // NOTE: this (pseudo-)random sample is performed off-chain
+            // so the randomness is not based on block hash/unix timestamp etc.
+            let randomIdx = Math.floor(Math.random() * nftList.length);
+            const eventNFT = nftList[randomIdx];
+
+            // create the transaction to be sent to the smart contract
+            // issues the ticket and NFT once the transaction is verified
             const tx = {
                 from: address, // from sender address
                 to: contractAddress, // to smart contract address
                 value: web3.utils.toWei(`${totalPriceExcludeGasFees}`, 'ether'), // value in ether
                 gas: gasLimit,
-                //TODO: change the testNFT to event-specific ones
-                data: contract.methods.createTicket(seat, TestNFT).encodeABI()
+                data: contract.methods.createTicket(seat, eventNFT).encodeABI()
             };
 
             web3.eth.sendTransaction(tx)
