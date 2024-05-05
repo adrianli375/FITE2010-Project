@@ -1,0 +1,23 @@
+{
+  "attributes": [
+    {
+      "trait_type": "Concert Name",
+      "value": "陳蕾紅館演唱會2024《念》"
+    },
+    {
+      "trait_type": "Artist Name",
+      "value": "陳蕾"
+    },
+    {
+      "trait_type": "Venue",
+      "value": "紅館（香港體育館）"
+    },
+    {
+      "trait_type": "Organizer",
+      "value": "Warner Music Hong Kong"
+    }
+  ],
+  "description": "誰都可發光只要找對地方",
+  "image": "ipfs://QmQ4TNSqeqVZ4EponEr2YiBJSyMnHGXQf1NZJ8qUd2QAzc/PantherChan%206.jpeg",
+  "name": "Panther Chan Concert Ticket"
+}
