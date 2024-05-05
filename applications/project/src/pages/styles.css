@@ -244,6 +244,7 @@ button:hover {
   
 .ticket-left {
     flex: 1;
+    padding-right: 1%;
 }
 
 .ticket-title {
@@ -255,6 +256,29 @@ button:hover {
 .ticket-info {
     font-size: 1.5rem;
     margin-bottom: 5px;
+
+    @media (max-width: 1400px) {
+        font-size: 1.3rem;
+        margin-bottom: 4px;
+    }
+
+    @media (max-width: 1200px) {
+        font-size: 1.2rem;
+        margin-bottom: 3px;
+    }
+}
+
+.ticket-image {
+    padding-left: 2%;
+    padding-right: 3%;
+    display: flex;
+    justify-content: center;
+    align-items: stretch;
+    min-width: 40%;
+
+    @media (max-width: 1080px) {
+        display: none;
+    }
 }
 
 .ticket-qr-code {
@@ -283,13 +307,21 @@ button:hover {
     text-align: center;
 }
 
-.ticket-transfer {
+.ticket-transfer, .ticket-return-to-home {
     position: absolute;
     margin: 10px;
     top: 65%;
     left: 40%;
     width: 120%;
     transform: translate(-50%, -50%);
+}
+
+.ticket-transfer {
+    width: 120%;
+}
+
+.ticket-return-to-home {
+    width: 105%;
 }
 
 .transfer-section {

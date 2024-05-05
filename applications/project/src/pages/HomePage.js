@@ -133,8 +133,8 @@ const HomePage = () => {
                 // check if the tickets of the account holder are identical to the previous state
                 // update the array of tickets if there are updates (or first connection to website)
                 if (JSON.stringify(accountTickets) !== JSON.stringify(tickets)) {
-                    console.table(tickets);
-                    console.table(accountTickets);
+                    // console.table(tickets);
+                    // console.table(accountTickets);
                     setTickets(accountTickets);
                 }
 
