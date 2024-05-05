@@ -6,7 +6,7 @@ This project is about building a concert ticketing website with a blockchain-bas
 This course project is conducted by a total of 5 students. 
 
 # Documents
-* [Proposal](.docs/proposal.md): Contains the project proposal. 
+* [Proposal](./docs/proposal.md): Contains the project proposal. 
 * [Setup guidelines](./docs/setup.md): Contains the documents to set up the environment and project website. 
 * [Website screenshots and demo](./docs/website-demo.md): Contains screenshots of the project website and demonstration. 
 
