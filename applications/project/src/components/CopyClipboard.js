@@ -1,5 +1,6 @@
 import React from "react";
 import { handleCopy, handleMouseEnter, handleMouseLeave } from '../utils/MouseUtilFunctions.js';
+import './styles_components.css';
 
 
 const Clipboard = ({ textToCopy }) => {

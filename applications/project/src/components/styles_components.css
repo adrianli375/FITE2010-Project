@@ -82,3 +82,11 @@
 .seat:not(.available):hover {
     cursor: not-allowed;
 }
+
+.copy-button {
+    font-size: 1.6rem;
+}
+
+.copy-tooltip {
+    visibility: hidden;
+}
