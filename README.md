@@ -9,6 +9,7 @@ This course project is conducted by a total of 5 students.
 * [Proposal](./docs/proposal.md): Contains the project proposal. 
 * [Setup guidelines](./docs/setup.md): Contains the documents to set up the environment and project website. 
 * [Website screenshots and demo](./docs/website-demo.md): Contains screenshots of the project website and demonstration. 
+* [Website design on Figma](https://www.figma.com/file/LEOqDm4llkKLQQRJxMf6x4/FITE2010-Web-Interface?type=design&node-id=0-1&mode=design): Contains the initial website design. Slightly differs from the actual website implementation due to subsequent adjustments. 
 
 # Project Stack
 * Frontend: HTML, CSS, JavaScript (mainly using `web3.js` library for smart contract interaction), React (as the frontend)

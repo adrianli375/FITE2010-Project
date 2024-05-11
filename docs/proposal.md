@@ -15,6 +15,6 @@ Ticket counterfeiting, customer data leakage, and ticket price manipulation are 
 
 ## Our Solution
 We have implemented a blockchain-based ticketing system, and the tickets have the following characteristics and advantages: 
-1. **Digital authentication**: The ticket has a QR code generated, which is based on the hash of the ticket data (converted from json to str) and the wallet address of the ticker. This ensures authenticity when checking the identity of the ticket and its owner. 
+1. **Digital authentication**: The ticket has a QR code generated, which is based on the hash of the ticket data (converted from json to str) and the wallet address of the ticket. This ensures authenticity when checking the identity of the ticket and its owner. 
 2. **Limited maximum transfers**: This ticket is designed based on the code and rules defined in a smart contract. The maximum number of ticket transfers are limited, so that the issue of ticket counterfeiting can be addressed, as manipulation in the ticket will not give a valid authenticity. 
 3. **Random NFT Generation**: For each event, there are a set of specific NFTs to be minted. The choice of the NFT is random and is not depending on the block hash and other block metadata. This randomized choice is performed off-chain on the frontend script. 
